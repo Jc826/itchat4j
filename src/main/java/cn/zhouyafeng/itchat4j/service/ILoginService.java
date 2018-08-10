@@ -1,5 +1,7 @@
 package cn.zhouyafeng.itchat4j.service;
 
+import cn.zhouyafeng.itchat4j.core.MsgCenter;
+
 /**
  * 登陆服务接口
  * 
@@ -78,5 +80,7 @@ public interface ILoginService {
 	 * @date 2017年6月22日 下午11:24:35
 	 */
 	void WebWxBatchGetContact();
+
+	MsgCenter getMsgCenter();
 
 }

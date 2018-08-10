@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.HttpEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -28,7 +29,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.URLEnum;
  */
 public class DownloadTools {
 	private static Logger logger = Logger.getLogger("DownloadTools");
-	private static Core core = Core.getInstance();
+	private static Core core = CoreHolder.getCore();
 	private static MyHttpClient myHttpClient = core.getMyHttpClient();
 
 	/**

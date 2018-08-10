@@ -14,7 +14,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.parameters.BaseParaEnum;
 
 /**
  * 核心存储类，全局只保存一份，单例模式
- * 
+ *
  * @author https://github.com/yaphone
  * @date 创建时间：2017年4月23日 下午2:33:56
  * @version 1.0
@@ -22,20 +22,12 @@ import cn.zhouyafeng.itchat4j.utils.enums.parameters.BaseParaEnum;
  */
 public class Core {
 
-	private static Core instance;
 
-	private Core() {
+	public Core() {
 
 	}
 
-	public static Core getInstance() {
-		if (instance == null) {
-			synchronized (Core.class) {
-				instance = new Core();
-			}
-		}
-		return instance;
-	}
+
 
 	boolean alive = false;
 	private int memberCount = 0;
@@ -55,12 +47,16 @@ public class Core {
 	private List<JSONObject> specialUsersList = new ArrayList<JSONObject>();;// 特殊账号
 	private List<String> groupIdList = new ArrayList<String>(); // 群ID列表
 	private List<String> groupNickNameList = new ArrayList<String>(); // 群NickName列表
+    private List<Map<String, Object>> groupNickNameIdList = new ArrayList<>();
 
-	private Map<String, JSONObject> userInfoMap = new HashMap<String, JSONObject>();
+
+
+
+    private Map<String, JSONObject> userInfoMap = new HashMap<String, JSONObject>();
 
 	Map<String, Object> loginInfo = new HashMap<String, Object>();
 	// CloseableHttpClient httpClient = HttpClients.createDefault();
-	MyHttpClient myHttpClient = MyHttpClient.getInstance();
+	MyHttpClient myHttpClient = new MyHttpClient();
 	String uuid = null;
 
 	boolean useHotReload = false;
@@ -75,7 +71,7 @@ public class Core {
 	public Map<String, Object> getParamMap() {
 		return new HashMap<String, Object>(1) {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -273,4 +269,11 @@ public class Core {
 		this.indexUrl = indexUrl;
 	}
 
+    public List<Map<String, Object>> getGroupNickNameIdList() {
+        return groupNickNameIdList;
+    }
+
+    public void setGroupNickNameIdList(List<Map<String, Object>> groupNickNameIdList) {
+        this.groupNickNameIdList = groupNickNameIdList;
+    }
 }

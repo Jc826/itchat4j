@@ -33,6 +33,7 @@ public class SimpleDemo implements IMsgHandlerFace {
 			// String userId = msg.getString("FromUserName");
 			// MessageTools.sendFileMsgByUserId(userId, docFilePath); // 发送文件
 			// MessageTools.sendPicMsgByUserId(userId, docFilePath);
+
 			String text = msg.getText(); // 发送文本消息，也可调用MessageTools.sendFileMsgByUserId(userId,text);
 			LOG.info(text);
 			if (text.equals("111")) {
@@ -42,9 +43,11 @@ public class SimpleDemo implements IMsgHandlerFace {
 				WechatTools.remarkNameByNickName("yaphone", "Hello");
 			}
 			if (text.equals("333")) { // 测试群列表
-				System.out.print(WechatTools.getGroupNickNameList());
-				System.out.print(WechatTools.getGroupIdList());
-				System.out.print(Core.getInstance().getGroupMemeberMap());
+//				System.out.print(WechatTools.getGroupNickNameList());
+//				System.out.print(WechatTools.getGroupIdList());
+				System.out.print(WechatTools.getGroupList());
+				System.out.print(WechatTools.getGroupNickNameIdList());
+//				System.out.print(Core.getInstance().getGroupMemeberMap());
 			}
 			return text;
 		}

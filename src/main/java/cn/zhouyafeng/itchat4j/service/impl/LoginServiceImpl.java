@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.regex.Matcher;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.message.BasicNameValuePair;
@@ -53,13 +54,27 @@ import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
 public class LoginServiceImpl implements ILoginService {
 	private static Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);
 
-	private Core core = Core.getInstance();
-	private MyHttpClient httpClient = core.getMyHttpClient();
+	private Core core ;
+	private MyHttpClient httpClient ;
 
-	private MyHttpClient myHttpClient = core.getMyHttpClient();
+	private MyHttpClient myHttpClient;
 
-	public LoginServiceImpl() {
+	private MsgCenter msgCenter;
 
+	public LoginServiceImpl(Core core) {
+		this.core=core;
+		CoreHolder.setCore(core);
+        httpClient = core.getMyHttpClient();
+        myHttpClient = core.getMyHttpClient();
+        msgCenter=new MsgCenter(core);
+	}
+	@Override
+	public MsgCenter getMsgCenter() {
+		return msgCenter;
+	}
+
+	public void setMsgCenter(MsgCenter msgCenter) {
+		this.msgCenter = msgCenter;
 	}
 
 	@Override
@@ -274,7 +289,7 @@ public class LoginServiceImpl implements ILoginService {
 									try {
 										JSONArray msgList = new JSONArray();
 										msgList = msgObj.getJSONArray("AddMsgList");
-										msgList = MsgCenter.produceMsg(msgList);
+										msgList = msgCenter.produceMsg(msgList);
 										for (int j = 0; j < msgList.size(); j++) {
 											BaseMsg baseMsg = JSON.toJavaObject(msgList.getJSONObject(j),
 													BaseMsg.class);
@@ -296,7 +311,7 @@ public class LoginServiceImpl implements ILoginService {
 										JSONArray msgList = new JSONArray();
 										msgList = msgObj.getJSONArray("AddMsgList");
 										JSONArray modContactList = msgObj.getJSONArray("ModContactList"); // 存在删除或者新增的好友信息
-										msgList = MsgCenter.produceMsg(msgList);
+										msgList = msgCenter.produceMsg(msgList);
 										for (int j = 0; j < msgList.size(); j++) {
 											JSONObject userInfo = modContactList.getJSONObject(j);
 											// 存在主动加好友之后的同步联系人到本地
@@ -384,6 +399,11 @@ public class LoginServiceImpl implements ILoginService {
 						core.getGroupNickNameList().add(o.getString("NickName"));
 						core.getGroupIdList().add(o.getString("UserName"));
 						core.getGroupList().add(o);
+						//更新群昵称 及id 列表
+						Map<String,Object> groupNickIdMap=new HashMap<>();
+						groupNickIdMap.put("UserName",o.getString("UserName"));
+						groupNickIdMap.put("NickName",o.getString("NickName"));
+						core.getGroupNickNameIdList().add(groupNickIdMap);
 					}
 				} else if (o.getString("UserName").equals(core.getUserSelf().getString("UserName"))) { // 自己
 					core.getContactList().remove(o);
@@ -424,6 +444,11 @@ public class LoginServiceImpl implements ILoginService {
 					core.getGroupList().add(contactList.getJSONObject(i)); // 更新群信息（所有）列表
 					core.getGroupMemeberMap().put(contactList.getJSONObject(i).getString("UserName"),
 							contactList.getJSONObject(i).getJSONArray("MemberList")); // 更新群成员Map
+//更新群昵称 及id 列表
+					Map<String,Object> groupNickIdMap=new HashMap<>();
+					groupNickIdMap.put("UserName",contactList.getJSONObject(i).getString("UserName"));
+					groupNickIdMap.put("NickName",contactList.getJSONObject(i).getString("NickName"));
+					core.getGroupNickNameIdList().add(groupNickIdMap);
 				}
 			}
 		} catch (Exception e) {

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
 
@@ -30,18 +31,26 @@ import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
  */
 public class TulingRobot implements IMsgHandlerFace {
 	Logger logger = Logger.getLogger("TulingRobot");
-	MyHttpClient myHttpClient = Core.getInstance().getMyHttpClient();
-	String url = "http://www.tuling123.com/openapi/api";
-	String apiKey = "597b34bea4ec4c85a775c469c84b6817"; // 这里是我申请的图灵机器人API接口，每天只能5000次调用，建议自己去申请一个，免费的:)
+	MyHttpClient myHttpClient = CoreHolder.getCore().getMyHttpClient();
+
+	String url = "http://openapi.tuling123.com/openapi/api/v2";
+	String apiKey = "b7e983edaf034481b02289c4b585c6a5"; // 这里是我申请的图灵机器人API接口，每天只能5000次调用，建议自己去申请一个，免费的:)
 
 	@Override
 	public String textMsgHandle(BaseMsg msg) {
 		String result = "";
 		String text = msg.getText();
-		Map<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("key", apiKey);
-		paramMap.put("info", text);
-		paramMap.put("userid", "123456");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, Object> perception = new HashMap<String, Object>();
+        perception.put("inputText",text);
+		Map<String, Object> userInfo = new HashMap<String, Object>();
+
+        userInfo.put("apiKey",apiKey);
+        userInfo.put("userId","12345");
+
+
+		paramMap.put("userInfo", userInfo);
+		paramMap.put("perception", perception);
 		String paramStr = JSON.toJSONString(paramMap);
 		try {
 			HttpEntity entity = myHttpClient.doPost(url, paramStr);

@@ -21,9 +21,13 @@ import cn.zhouyafeng.itchat4j.utils.SleepUtils;
  */
 public class CheckLoginStatusThread implements Runnable {
 	private static Logger LOG = LoggerFactory.getLogger(CheckLoginStatusThread.class);
-	private Core core = Core.getInstance();
+	private Core core ;
 
-	@Override
+    public CheckLoginStatusThread(Core core) {
+    	this.core=core;
+    }
+
+    @Override
 	public void run() {
 		while (core.isAlive()) {
 			long t1 = System.currentTimeMillis(); // 秒为单位

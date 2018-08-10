@@ -35,20 +35,24 @@ import org.apache.http.util.EntityUtils;
 public class MyHttpClient {
 	private Logger logger = Logger.getLogger("MyHttpClient");
 
-	private static CloseableHttpClient httpClient = HttpClients.createDefault();
+	private  CloseableHttpClient httpClient = HttpClients.createDefault();
 
-	private static MyHttpClient instance = null;
 
-	private static CookieStore cookieStore;
 
-	static {
+	private  CookieStore cookieStore;
+
+	public MyHttpClient() {
+
 		cookieStore = new BasicCookieStore();
 
 		// 将CookieStore设置到httpClient中
 		httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 	}
 
-	public static String getCookie(String name) {
+
+
+
+	public  String getCookie(String name) {
 		List<Cookie> cookies = cookieStore.getCookies();
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equalsIgnoreCase(name)) {
@@ -59,27 +63,9 @@ public class MyHttpClient {
 
 	}
 
-	private MyHttpClient() {
 
-	}
 
-	/**
-	 * 获取cookies
-	 * 
-	 * @author https://github.com/yaphone
-	 * @date 2017年5月7日 下午8:37:17
-	 * @return
-	 */
-	public static MyHttpClient getInstance() {
-		if (instance == null) {
-			synchronized (MyHttpClient.class) {
-				if (instance == null) {
-					instance = new MyHttpClient();
-				}
-			}
-		}
-		return instance;
-	}
+
 
 	/**
 	 * 处理GET请求
@@ -176,7 +162,7 @@ public class MyHttpClient {
 		return entity;
 	}
 
-	public static CloseableHttpClient getHttpClient() {
+	public  CloseableHttpClient getHttpClient() {
 		return httpClient;
 	}
 

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.StorageLoginInfoEnum;
  */
 public class PicYourFriends implements IMsgHandlerFace {
 	private static Logger LOG = LoggerFactory.getLogger(PicYourFriends.class);
-	private static final Core core = Core.getInstance();
+	private static final Core core = CoreHolder.getCore();
 	private static final MyHttpClient myHttpClient = core.getMyHttpClient();
 	private static final String path = "D://itchat4j//head"; // 这里需要设置保存头像的路径
 

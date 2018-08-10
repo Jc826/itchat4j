@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -43,7 +44,7 @@ import cn.zhouyafeng.itchat4j.utils.enums.VerifyFriendEnum;
  */
 public class MessageTools {
 	private static Logger LOG = LoggerFactory.getLogger(MessageTools.class);
-	private static Core core = Core.getInstance();
+	private static Core core = CoreHolder.getCore();
 	private static MyHttpClient myHttpClient = core.getMyHttpClient();
 
 	/**
@@ -154,7 +155,7 @@ public class MessageTools {
 		String passTicket = (String) core.getLoginInfo().get("pass_ticket");
 		String clientMediaId = String.valueOf(new Date().getTime())
 				+ String.valueOf(new Random().nextLong()).substring(0, 4);
-		String webwxDataTicket = MyHttpClient.getCookie("webwx_data_ticket");
+		String webwxDataTicket = myHttpClient.getCookie("webwx_data_ticket");
 		if (webwxDataTicket == null) {
 			LOG.error("get cookie webwx_data_ticket error");
 			return null;

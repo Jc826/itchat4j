@@ -3,6 +3,7 @@ package cn.zhouyafeng.itchat4j.core;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
+import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,13 @@ import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
 public class MsgCenter {
 	private static Logger LOG = LoggerFactory.getLogger(MsgCenter.class);
 
-	private static Core core = Core.getInstance();
+	private  Core core;
 
-	/**
+    public MsgCenter(Core core) {
+        this.core = core;
+    }
+
+    /**
 	 * 接收消息，放入队列
 	 * 
 	 * @author https://github.com/yaphone
@@ -37,7 +42,7 @@ public class MsgCenter {
 	 * @param msgList
 	 * @return
 	 */
-	public static JSONArray produceMsg(JSONArray msgList) {
+	public  JSONArray produceMsg(JSONArray msgList) {
 		JSONArray result = new JSONArray();
 		for (int i = 0; i < msgList.size(); i++) {
 			JSONObject msg = new JSONObject();
@@ -119,7 +124,7 @@ public class MsgCenter {
 	 * @date 2017年5月14日 上午10:52:34
 	 * @param msgHandler
 	 */
-	public static void handleMsg(IMsgHandlerFace msgHandler) {
+	public  void handleMsg(IMsgHandlerFace msgHandler) {
 		while (true) {
 			if (core.getMsgList().size() > 0 && core.getMsgList().get(0).getContent() != null) {
 				if (core.getMsgList().get(0).getContent().length() > 0) {
@@ -132,16 +137,16 @@ public class MsgCenter {
 							} else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
 
 								String result = msgHandler.picMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.VOICE.getType())) {
 								String result = msgHandler.voiceMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.VIEDO.getType())) {
 								String result = msgHandler.viedoMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.NAMECARD.getType())) {
 								String result = msgHandler.nameCardMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.SYS.getType())) { // 系统消息
 								msgHandler.sysMsgHandle(msg);
 							} else if (msg.getType().equals(MsgTypeEnum.VERIFYMSG.getType())) { // 确认添加好友消息
@@ -150,7 +155,7 @@ public class MsgCenter {
 										core.getMsgList().get(0).getRecommendInfo().getUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.MEDIA.getType())) { // 多媒体消息
 								String result = msgHandler.mediaMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
