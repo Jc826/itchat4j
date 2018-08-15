@@ -1,11 +1,10 @@
 package cn.zhouyafeng.itchat4j.utils.enums.parameters;
 
 /**
- *
  * 基本请求参数
  * 1. webWxInit      初始化
  * 2. wxStatusNotify 微信状态通知
- *
+ * <p>
  * <p>
  * Created by xiaoxiaomo on 2017/5/7.
  */

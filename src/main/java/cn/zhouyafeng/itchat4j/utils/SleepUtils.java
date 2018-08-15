@@ -7,11 +7,12 @@ public class SleepUtils {
 
     /**
      * 毫秒为单位
+     *
      * @param time
      */
-    public static void sleep( long time ){
+    public static void sleep(long time) {
         try {
-            Thread.sleep( time );
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

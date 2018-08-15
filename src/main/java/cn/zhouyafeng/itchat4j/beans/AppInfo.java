@@ -4,34 +4,33 @@ import java.io.Serializable;
 
 /**
  * AppInfo
- * 
- * @author https://github.com/yaphone
- * @date 创建时间：2017年7月3日 下午10:38:14
- * @version 1.0
  *
+ * @author https://github.com/yaphone
+ * @version 1.0
+ * @date 创建时间：2017年7月3日 下午10:38:14
  */
 public class AppInfo implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int type;
-	private String appId;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private int type;
+    private String appId;
 
-	public int getType() {
-		return type;
-	}
+    public int getType() {
+        return type;
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
+    public void setType(int type) {
+        this.type = type;
+    }
 
-	public String getAppId() {
-		return appId;
-	}
+    public String getAppId() {
+        return appId;
+    }
 
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
 }

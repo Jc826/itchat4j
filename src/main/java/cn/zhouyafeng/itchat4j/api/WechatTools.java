@@ -31,7 +31,7 @@ public class WechatTools {
     private Core core;
 
 
-    public WechatTools(Core core ) {
+    public WechatTools(Core core) {
         this.core = core;
     }
 
