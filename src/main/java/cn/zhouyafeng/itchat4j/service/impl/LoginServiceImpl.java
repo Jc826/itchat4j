@@ -3,16 +3,12 @@ package cn.zhouyafeng.itchat4j.service.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.regex.Matcher;
 
+import cn.zhouyafeng.itchat4j.api.MessageTools;
+import cn.zhouyafeng.itchat4j.api.WechatTools;
 import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -61,12 +57,18 @@ public class LoginServiceImpl implements ILoginService {
 
 	private MsgCenter msgCenter;
 
+	private MessageTools messageTools;
+	private WechatTools wechatTools;
+
+
 	public LoginServiceImpl(Core core) {
 		this.core=core;
-		CoreHolder.setCore(core);
+
         httpClient = core.getMyHttpClient();
         myHttpClient = core.getMyHttpClient();
-        msgCenter=new MsgCenter(core);
+		wechatTools=new WechatTools(core);
+		messageTools=new MessageTools(core,wechatTools);
+        msgCenter=new MsgCenter(core,messageTools);
 	}
 	@Override
 	public MsgCenter getMsgCenter() {
@@ -145,17 +147,24 @@ public class LoginServiceImpl implements ILoginService {
 
 	@Override
 	public boolean getQR(String qrPath) {
-		qrPath = qrPath + File.separator + "QR.jpg";
+		File file=new File(qrPath);
+		if(!file.exists()){
+			file.mkdirs();
+		}
+		qrPath = qrPath + File.separator + UUID.randomUUID().toString().replaceAll("-", "")+".jpg";
 		String qrUrl = URLEnum.QRCODE_URL.getUrl() + core.getUuid();
 		HttpEntity entity = myHttpClient.doGet(qrUrl, null, true, null);
+
 		try {
+
 			OutputStream out = new FileOutputStream(qrPath);
 			byte[] bytes = EntityUtils.toByteArray(entity);
 			out.write(bytes);
 			out.flush();
 			out.close();
 			try {
-				CommonTools.printQr(qrPath); // 打开登陆二维码图片
+				// 打开登陆二维码图片
+				CommonTools.printQr(qrPath);
 			} catch (Exception e) {
 				LOG.info(e.getMessage());
 			}
@@ -362,7 +371,7 @@ public class LoginServiceImpl implements ILoginService {
 			List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 			if (fullFriendsJsonList.get("Seq") != null) {
 				seq = fullFriendsJsonList.getLong("Seq");
-				currentTime = new Date().getTime();
+				currentTime = System.currentTimeMillis();
 			}
 			core.setMemberCount(fullFriendsJsonList.getInteger(StorageLoginInfoEnum.MemberCount.getKey()));
 			JSONArray member = fullFriendsJsonList.getJSONArray(StorageLoginInfoEnum.MemberList.getKey());
@@ -381,7 +390,7 @@ public class LoginServiceImpl implements ILoginService {
 
 				if (fullFriendsJsonList.get("Seq") != null) {
 					seq = fullFriendsJsonList.getLong("Seq");
-					currentTime = new Date().getTime();
+					currentTime = System.currentTimeMillis();
 				}
 
 				// 累加好友列表
@@ -421,7 +430,7 @@ public class LoginServiceImpl implements ILoginService {
 	@Override
 	public void WebWxBatchGetContact() {
 		String url = String.format(URLEnum.WEB_WX_BATCH_GET_CONTACT.getUrl(),
-				core.getLoginInfo().get(StorageLoginInfoEnum.url.getKey()), new Date().getTime(),
+				core.getLoginInfo().get(StorageLoginInfoEnum.url.getKey()), System.currentTimeMillis(),
 				core.getLoginInfo().get(StorageLoginInfoEnum.pass_ticket.getKey()));
 		Map<String, Object> paramMap = core.getParamMap();
 		paramMap.put("Count", core.getGroupIdList().size());
@@ -476,7 +485,7 @@ public class LoginServiceImpl implements ILoginService {
 	 *
 	 * @author https://github.com/yaphone
 	 * @date 2017年4月9日 下午12:16:26
-	 * @param result
+	 * @param loginContent
 	 */
 	private void processLoginInfo(String loginContent) {
 		String regEx = "window.redirect_uri=\"(\\S+)\";";
@@ -622,7 +631,7 @@ public class LoginServiceImpl implements ILoginService {
 		Map<String, Object> paramMap = core.getParamMap();
 		paramMap.put(StorageLoginInfoEnum.SyncKey.getKey(),
 				core.getLoginInfo().get(StorageLoginInfoEnum.SyncKey.getKey()));
-		paramMap.put("rr", -new Date().getTime() / 1000);
+		paramMap.put("rr", -System.currentTimeMillis() / 1000);
 		String paramStr = JSON.toJSONString(paramMap);
 		try {
 			HttpEntity entity = myHttpClient.doPost(url, paramStr);
@@ -667,9 +676,9 @@ public class LoginServiceImpl implements ILoginService {
 			params.add(new BasicNameValuePair(baseRequest.para().toLowerCase(),
 					core.getLoginInfo().get(baseRequest.value()).toString()));
 		}
-		params.add(new BasicNameValuePair("r", String.valueOf(new Date().getTime())));
+		params.add(new BasicNameValuePair("r", String.valueOf(System.currentTimeMillis())));
 		params.add(new BasicNameValuePair("synckey", (String) core.getLoginInfo().get("synckey")));
-		params.add(new BasicNameValuePair("_", String.valueOf(new Date().getTime())));
+		params.add(new BasicNameValuePair("_", String.valueOf(System.currentTimeMillis())));
 		SleepUtils.sleep(7);
 		try {
 			HttpEntity entity = myHttpClient.doGet(url, params, true, null);

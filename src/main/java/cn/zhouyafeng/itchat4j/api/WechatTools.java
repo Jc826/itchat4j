@@ -1,7 +1,6 @@
 package cn.zhouyafeng.itchat4j.api;
 
 import cn.zhouyafeng.itchat4j.core.Core;
-import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import cn.zhouyafeng.itchat4j.utils.enums.StorageLoginInfoEnum;
 import cn.zhouyafeng.itchat4j.utils.enums.URLEnum;
 import com.alibaba.fastjson.JSON;
@@ -29,19 +28,13 @@ import java.util.Map;
 public class WechatTools {
     private static Logger LOG = LoggerFactory.getLogger(WechatTools.class);
 
-    private static   Core core = CoreHolder.getCore();
+    private Core core;
 
-    /**
-     * 根据用户名发送文本消息
-     *
-     * @param msg
-     * @param toUserName
-     * @author https://github.com/yaphone
-     * @date 2017年5月4日 下午10:43:14
-     */
-    public static void sendMsgByUserName(String msg, String toUserName) {
-        MessageTools.sendMsgById(msg, toUserName);
+
+    public WechatTools(Core core ) {
+        this.core = core;
     }
+
 
     /**
      * <p>
@@ -53,12 +46,12 @@ public class WechatTools {
      * 可通过UserName发送消息
      * </p>
      *
-     * @param name
+     * @param nickName
      * @return
      * @author https://github.com/yaphone
      * @date 2017年5月4日 下午10:56:31
      */
-    public static String getUserNameByNickName(String nickName) {
+    public String getUserNameByNickName(String nickName) {
         for (JSONObject o : core.getContactList()) {
             if (o.getString("NickName").equals(nickName)) {
                 return o.getString("UserName");
@@ -74,7 +67,7 @@ public class WechatTools {
      * @author https://github.com/yaphone
      * @date 2017年5月4日 下午11:37:20
      */
-    public static List<String> getContactNickNameList() {
+    public List<String> getContactNickNameList() {
         List<String> contactNickNameList = new ArrayList<String>();
         for (JSONObject o : core.getContactList()) {
             contactNickNameList.add(o.getString("NickName"));
@@ -88,7 +81,7 @@ public class WechatTools {
      * @return
      * @date 2017年6月26日 下午9:45:39
      */
-    public static List<JSONObject> getContactList() {
+    public List<JSONObject> getContactList() {
         return core.getContactList();
     }
 
@@ -99,7 +92,7 @@ public class WechatTools {
      * @author https://github.com/yaphone
      * @date 2017年5月5日 下午9:55:21
      */
-    public static List<JSONObject> getGroupList() {
+    public List<JSONObject> getGroupList() {
         return core.getGroupList();
     }
 
@@ -109,7 +102,7 @@ public class WechatTools {
      * @return
      * @date 2017年6月21日 下午11:42:56
      */
-    public static List<String> getGroupIdList() {
+    public List<String> getGroupIdList() {
         return core.getGroupIdList();
     }
 
@@ -119,7 +112,7 @@ public class WechatTools {
      * @return
      * @date 2017年6月21日 下午11:43:38
      */
-    public static List<String> getGroupNickNameList() {
+    public List<String> getGroupNickNameList() {
         return core.getGroupNickNameList();
     }
 
@@ -128,7 +121,7 @@ public class WechatTools {
      *
      * @return
      */
-    public static List<Map<String, Object>> getGroupNickNameIdList() {
+    public List<Map<String, Object>> getGroupNickNameIdList() {
         return core.getGroupNickNameIdList();
     }
 
@@ -140,7 +133,7 @@ public class WechatTools {
      * @return
      * @date 2017年6月13日 下午11:12:31
      */
-    public static JSONArray getMemberListByGroupId(String groupId) {
+    public JSONArray getMemberListByGroupId(String groupId) {
         return core.getGroupMemeberMap().get(groupId);
     }
 
@@ -150,11 +143,11 @@ public class WechatTools {
      * @author https://github.com/yaphone
      * @date 2017年5月18日 下午11:56:54
      */
-    public static void logout() {
+    public void logout() {
         webWxLogout();
     }
 
-    private static boolean webWxLogout() {
+    private boolean webWxLogout() {
         String url = String.format(URLEnum.WEB_WX_LOGOUT.getUrl(),
                 core.getLoginInfo().get(StorageLoginInfoEnum.url.getKey()));
         List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -174,7 +167,7 @@ public class WechatTools {
         return false;
     }
 
-    public static void setUserInfo() {
+    public void setUserInfo() {
         for (JSONObject o : core.getContactList()) {
             core.getUserInfoMap().put(o.getString("NickName"), o);
             core.getUserInfoMap().put(o.getString("UserName"), o);
@@ -184,11 +177,11 @@ public class WechatTools {
     /**
      * 根据用户昵称设置备注名称
      *
-     * @param userName
+     * @param nickName
      * @param remName
      * @date 2017年5月27日 上午12:21:40
      */
-    public static void remarkNameByNickName(String nickName, String remName) {
+    public void remarkNameByNickName(String nickName, String remName) {
         String url = String.format(URLEnum.WEB_WX_REMARKNAME.getUrl(), core.getLoginInfo().get("url"),
                 core.getLoginInfo().get(StorageLoginInfoEnum.pass_ticket.getKey()));
         Map<String, Object> msgMap = new HashMap<String, Object>();
@@ -217,7 +210,7 @@ public class WechatTools {
      * @return
      * @date 2017年6月16日 上午12:47:46
      */
-    public static boolean getWechatStatus() {
+    public boolean getWechatStatus() {
         return core.isAlive();
     }
 

@@ -30,8 +30,11 @@ public class MsgCenter {
 
 	private  Core core;
 
-    public MsgCenter(Core core) {
+	private MessageTools messageTools;
+
+    public MsgCenter(Core core,MessageTools messageTools) {
         this.core = core;
+		this.messageTools = messageTools;
     }
 
     /**
@@ -89,7 +92,7 @@ public class MsgCenter {
 				m.put("Type", MsgTypeEnum.VOICE.getType());
 			} else if (m.getInteger("MsgType").equals(MsgCodeEnum.MSGTYPE_VERIFYMSG.getCode())) {// friends
 				// 好友确认消息
-				// MessageTools.addFriend(core, userName, 3, ticket); // 确认添加好友
+				// messageTools.addFriend(core, userName, 3, ticket); // 确认添加好友
 				m.put("Type", MsgTypeEnum.VERIFYMSG.getType());
 
 			} else if (m.getInteger("MsgType").equals(MsgCodeEnum.MSGTYPE_SHARECARD.getCode())) { // 共享名片
@@ -133,29 +136,29 @@ public class MsgCenter {
 						try {
 							if (msg.getType().equals(MsgTypeEnum.TEXT.getType())) {
 								String result = msgHandler.textMsgHandle(msg);
-								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.PIC.getType())) {
 
 								String result = msgHandler.picMsgHandle(msg);
-//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.VOICE.getType())) {
 								String result = msgHandler.voiceMsgHandle(msg);
-//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.VIEDO.getType())) {
 								String result = msgHandler.viedoMsgHandle(msg);
-//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.NAMECARD.getType())) {
 								String result = msgHandler.nameCardMsgHandle(msg);
-//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.SYS.getType())) { // 系统消息
 								msgHandler.sysMsgHandle(msg);
 							} else if (msg.getType().equals(MsgTypeEnum.VERIFYMSG.getType())) { // 确认添加好友消息
 								String result = msgHandler.verifyAddFriendMsgHandle(msg);
-								MessageTools.sendMsgById(result,
+								messageTools.sendMsgById(result,
 										core.getMsgList().get(0).getRecommendInfo().getUserName());
 							} else if (msg.getType().equals(MsgTypeEnum.MEDIA.getType())) { // 多媒体消息
 								String result = msgHandler.mediaMsgHandle(msg);
-//								MessageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
+//								messageTools.sendMsgById(result, core.getMsgList().get(0).getFromUserName());
 							}
 						} catch (Exception e) {
 							e.printStackTrace();

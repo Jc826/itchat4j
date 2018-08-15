@@ -54,14 +54,14 @@ public class Core {
 
     private Map<String, JSONObject> userInfoMap = new HashMap<String, JSONObject>();
 
-	Map<String, Object> loginInfo = new HashMap<String, Object>();
+	private Map<String, Object> loginInfo = new HashMap<String, Object>();
 	// CloseableHttpClient httpClient = HttpClients.createDefault();
-	MyHttpClient myHttpClient = new MyHttpClient();
-	String uuid = null;
+	private MyHttpClient myHttpClient = new MyHttpClient();
+	private String uuid = null;
 
-	boolean useHotReload = false;
-	String hotReloadDir = "itchat.pkl";
-	int receivingRetryCount = 5;
+	private boolean useHotReload = false;
+	private String hotReloadDir = "itchat.pkl";
+	private int receivingRetryCount = 5;
 
 	private long lastNormalRetcodeTime; // 最后一次收到正常retcode的时间，秒为单位
 

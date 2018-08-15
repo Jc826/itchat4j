@@ -24,7 +24,14 @@ import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
 public class LoginController {
 	private static Logger LOG = LoggerFactory.getLogger(LoginController.class);
 	private  Core core = new Core();
+	private WechatTools wechatTools=new WechatTools(core);
+
 	private ILoginService loginService = new LoginServiceImpl(core);
+
+	public LoginController() {
+
+
+	}
 
 	public MsgCenter getMsgCenter(){
 		return loginService.getMsgCenter();
@@ -34,7 +41,7 @@ public class LoginController {
 			LOG.info("itchat4j已登陆");
 			return;
 		}
-		CoreHolder.setCore(core);
+
 		while (true) {
 			for (int count = 0; count < 10; count++) {
 				LOG.info("获取UUID");
@@ -86,9 +93,14 @@ public class LoginController {
 		loginService.WebWxBatchGetContact();
 
 		LOG.info("11. 缓存本次登陆好友相关消息");
-		WechatTools.setUserInfo(); // 登陆成功后缓存本次登陆好友相关消息（NickName, UserName）
+		wechatTools=new WechatTools(core);
+		wechatTools.setUserInfo(); // 登陆成功后缓存本次登陆好友相关消息（NickName, UserName）
 
 		LOG.info("12.开启微信状态检测线程");
 		new Thread(new CheckLoginStatusThread(core)).start();
 	}
+
+	public Core getCore(){
+	    return this.core;
+    }
 }

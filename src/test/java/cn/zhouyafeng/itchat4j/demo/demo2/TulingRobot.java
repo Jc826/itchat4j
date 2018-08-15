@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import cn.zhouyafeng.itchat4j.api.MessageTools;
+import cn.zhouyafeng.itchat4j.api.WechatTools;
 import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
@@ -31,7 +33,12 @@ import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
  */
 public class TulingRobot implements IMsgHandlerFace {
 	Logger logger = Logger.getLogger("TulingRobot");
+	private   Core core = CoreHolder.getCore();
+
 	MyHttpClient myHttpClient = CoreHolder.getCore().getMyHttpClient();
+	private WechatTools wechatTools=new WechatTools(core);
+	private MessageTools messageTools=new MessageTools(core,wechatTools);
+	private  DownloadTools downloadTools=new DownloadTools(core);
 
 	String url = "http://openapi.tuling123.com/openapi/api/v2";
 	String apiKey = "b7e983edaf034481b02289c4b585c6a5"; // 这里是我申请的图灵机器人API接口，每天只能5000次调用，建议自己去申请一个，免费的:)
@@ -76,7 +83,7 @@ public class TulingRobot implements IMsgHandlerFace {
 	public String voiceMsgHandle(BaseMsg msg) {
 		String fileName = String.valueOf(new Date().getTime());
 		String voicePath = "D://itchat4j/voice" + File.separator + fileName + ".mp3";
-		DownloadTools.getDownloadFn(msg, MsgTypeEnum.VOICE.getType(), voicePath);
+		downloadTools.getDownloadFn(msg, MsgTypeEnum.VOICE.getType(), voicePath);
 		return "收到语音";
 	}
 
@@ -84,13 +91,15 @@ public class TulingRobot implements IMsgHandlerFace {
 	public String viedoMsgHandle(BaseMsg msg) {
 		String fileName = String.valueOf(new Date().getTime());
 		String viedoPath = "D://itchat4j/viedo" + File.separator + fileName + ".mp4";
-		DownloadTools.getDownloadFn(msg, MsgTypeEnum.VIEDO.getType(), viedoPath);
+		downloadTools.getDownloadFn(msg, MsgTypeEnum.VIEDO.getType(), viedoPath);
 		return "收到视频";
 	}
 
 	public static void main(String[] args) {
+
+		Wechat wechat = new Wechat( "D://itchat4j/login");
 		IMsgHandlerFace msgHandler = new TulingRobot();
-		Wechat wechat = new Wechat(msgHandler, "D://itchat4j/login");
+		wechat.setMsgHandler(msgHandler);
 		wechat.start();
 	}
 

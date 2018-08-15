@@ -1,5 +1,6 @@
 package cn.zhouyafeng.itchat4j;
 
+import cn.zhouyafeng.itchat4j.core.Core;
 import cn.zhouyafeng.itchat4j.thread.CoreHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +14,33 @@ public class Wechat {
 	private IMsgHandlerFace msgHandler;
 	private MsgCenter msgCenter;
 
-	public Wechat(IMsgHandlerFace msgHandler, String qrPath) {
-		System.setProperty("jsse.enableSNIExtension", "false"); // 防止SSL错误
+	private Core core;
+
+	public IMsgHandlerFace getMsgHandler() {
+		return msgHandler;
+	}
+
+	public void setMsgHandler(IMsgHandlerFace msgHandler) {
 		this.msgHandler = msgHandler;
+	}
+
+	public Wechat(String qrPath) {
+		System.setProperty("jsse.enableSNIExtension", "false"); // 防止SSL错误
+
 
 		// 登陆
 		LoginController login = new LoginController();
 		msgCenter=login.getMsgCenter();
 		login.login(qrPath);
+		setCore(login.getCore());
+	}
+
+	public Core getCore() {
+		return core;
+	}
+
+	private void setCore(Core core) {
+		this.core = core;
 	}
 
 	public void start() {

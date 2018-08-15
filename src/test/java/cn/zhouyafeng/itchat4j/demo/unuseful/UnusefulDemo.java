@@ -62,8 +62,9 @@ public class UnusefulDemo implements IMsgHandlerFace {
 	}
 
 	public static void main(String[] args) {
+		Wechat wechat = new Wechat( "D://itchat4j/login");
 		IMsgHandlerFace msgHandler = new UnusefulDemo();
-		Wechat wechat = new Wechat(msgHandler, "D://itchat4j/login");
+		wechat.setMsgHandler(msgHandler);
 		wechat.start();
 	}
 

@@ -31,9 +31,10 @@ import cn.zhouyafeng.itchat4j.utils.enums.StorageLoginInfoEnum;
  */
 public class PicYourFriends implements IMsgHandlerFace {
 	private static Logger LOG = LoggerFactory.getLogger(PicYourFriends.class);
-	private static final Core core = CoreHolder.getCore();
-	private static final MyHttpClient myHttpClient = core.getMyHttpClient();
-	private static final String path = "D://itchat4j//head"; // 这里需要设置保存头像的路径
+	private   Core core = CoreHolder.getCore();
+	private   MyHttpClient myHttpClient = core.getMyHttpClient();
+	private  final String path = "D://itchat4j//head"; // 这里需要设置保存头像的路径
+	private  WechatTools wechatTools=new WechatTools(core);
 
 	@Override
 	public String textMsgHandle(BaseMsg msg) {
@@ -44,7 +45,8 @@ public class PicYourFriends implements IMsgHandlerFace {
 			String skey = (String) core.getLoginInfo().get(StorageLoginInfoEnum.skey.getKey());
 			if (text.equals("111")) {
 				LOG.info("开始下载好友头像");
-				List<JSONObject> friends = WechatTools.getContactList();
+				List<JSONObject> friends = wechatTools.getContactList();
+
 				for (int i = 0; i < friends.size(); i++) {
 					JSONObject friend = friends.get(i);
 					String url = baseUrl + friend.getString("HeadImgUrl") + skey;
@@ -101,8 +103,10 @@ public class PicYourFriends implements IMsgHandlerFace {
 
 	public static void main(String[] args) {
 		String qrPath = "D://itchat4j//login"; // 保存登陆二维码图片的路径，这里需要在本地新建目录
-		IMsgHandlerFace msgHandler = new PicYourFriends(); // 实现IMsgHandlerFace接口的类
-		Wechat wechat = new Wechat(msgHandler, qrPath); // 【注入】
+
+		Wechat wechat = new Wechat( qrPath); // 【注入】
+        IMsgHandlerFace msgHandler = new PicYourFriends(); // 实现IMsgHandlerFace接口的类
+        wechat.setMsgHandler(msgHandler);
 		wechat.start(); // 启动服务，会在qrPath下生成一张二维码图片，扫描即可登陆，注意，二维码图片如果超过一定时间未扫描会过期，过期时会自动更新，所以你可能需要重新打开图片
 	}
 
