@@ -48,7 +48,7 @@
 
 *项目在不断更新中，API会有变动，请以具体代码为准*
 
-目前在`package cn.zhouyafeng.itchat4j.api`包中有两个静态类，即`MessageTools`和`WechatTools`，目前对外暴露的方法有：
+目前在`package com.jc.itchat4j.api`包中有两个静态类，即`MessageTools`和`WechatTools`，目前对外暴露的方法有：
 
 ####  1.获取好友昵称列表  WechatTools.getContactNickNameList()
 
@@ -201,7 +201,7 @@ src/main/java是itchat4j的项目源码，在src/test/java目录下有两个小D
 
 ## 消息格式
 
-对于收到的消息，itchat4j将其以POJO类的形式进行了封装，即在`package cn.zhouyafeng.itchat4j.beans`包中的`BaseMsg类`，其声明如下：
+对于收到的消息，itchat4j将其以POJO类的形式进行了封装，即在`package com.jc.itchat4j.beans`包中的`BaseMsg类`，其声明如下：
 
 ```java
 /**
@@ -279,9 +279,9 @@ public class BaseMsg implements Serializable {
 首先需要新建一个类来实现`IMsgHandlerFace`这个接口，这个类要做的就是我们需要完成的逻辑，该接口有若干个需要自己实现的方法，如`textMsgHandle`用于处理文本信息，`picMsgHandle`用于处理图片信息，`viedoMsgHandle`用于处理小视频信息，`voiceMsgHandle`用于处理语音信息等，代码如下：
 
 ```java
-package cn.zhouyafeng.itchat4j.face;
+package com.jc.itchat4j.face;
 
-import cn.zhouyafeng.itchat4j.beans.BaseMsg;
+import com.jc.itchat4j.beans.BaseMsg;
 
 /**
  * 消息处理接口
@@ -381,7 +381,7 @@ public interface IMsgHandlerFace {
 就不多说了，让代码和注释君自述吧，有不明白的地方，可以在Issue中提出来。
 
 ```java
-package cn.zhouyafeng.itchat4j.demo.demo1;
+package cn.jc.itchat4j.demo.demo1;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -389,14 +389,14 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-import cn.zhouyafeng.itchat4j.api.MessageTools;
-import cn.zhouyafeng.itchat4j.api.WechatTools;
-import cn.zhouyafeng.itchat4j.beans.BaseMsg;
-import cn.zhouyafeng.itchat4j.beans.RecommendInfo;
-import cn.zhouyafeng.itchat4j.core.Core;
-import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
-import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
-import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
+import com.jc.itchat4j.api.MessageTools;
+import com.jc.itchat4j.api.WechatTools;
+import com.jc.itchat4j.beans.BaseMsg;
+import com.jc.itchat4j.beans.RecommendInfo;
+import com.jc.itchat4j.core.Core;
+import com.jc.itchat4j.face.IMsgHandlerFace;
+import com.jc.itchat4j.utils.enums.MsgTypeEnum;
+import com.jc.itchat4j.utils.tools.DownloadTools;
 
 /**
  * 简单示例程序，收到文本信息自动回复原信息，收到图片、语音、小视频后根据路径自动保存
@@ -514,7 +514,7 @@ public class MyTest {
 这个示例中我们接入图灵机器人的API，将收到的好友的文本信息发送给图灵机器人，并将机器人回复的消息发送给好友，接下来还是把舞台交代码和注释君吧。
 
 ```Java
-package cn.zhouyafeng.itchat4j.demo.demo2;
+package cn.jc.itchat4j.demo.demo2;
 
 import java.io.File;
 import java.util.Date;
@@ -528,13 +528,13 @@ import org.apache.http.util.EntityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import cn.zhouyafeng.itchat4j.Wechat;
-import cn.zhouyafeng.itchat4j.beans.BaseMsg;
-import cn.zhouyafeng.itchat4j.core.Core;
-import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
-import cn.zhouyafeng.itchat4j.utils.MyHttpClient;
-import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
-import cn.zhouyafeng.itchat4j.utils.tools.DownloadTools;
+import com.jc.itchat4j.Wechat;
+import com.jc.itchat4j.beans.BaseMsg;
+import com.jc.itchat4j.core.Core;
+import com.jc.itchat4j.face.IMsgHandlerFace;
+import com.jc.itchat4j.utils.MyHttpClient;
+import com.jc.itchat4j.utils.enums.MsgTypeEnum;
+import com.jc.itchat4j.utils.tools.DownloadTools;
 
 /**
  * 图灵机器人示例
@@ -633,7 +633,7 @@ public class TulingRobot implements IMsgHandlerFace {
 代码自释吧，需要注意的是需要自己设定保存头像文件的路径，收到`111`消息后，将会下载所有好友的头像。
 
 ```java
-package cn.zhouyafeng.itchat4j.demo.demo3;
+package cn.jc.itchat4j.demo.demo3;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -647,13 +647,13 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
-import cn.zhouyafeng.itchat4j.Wechat;
-import cn.zhouyafeng.itchat4j.api.WechatTools;
-import cn.zhouyafeng.itchat4j.beans.BaseMsg;
-import cn.zhouyafeng.itchat4j.core.Core;
-import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
-import cn.zhouyafeng.itchat4j.utils.MyHttpClient;
-import cn.zhouyafeng.itchat4j.utils.enums.StorageLoginInfoEnum;
+import com.jc.itchat4j.Wechat;
+import com.jc.itchat4j.api.WechatTools;
+import com.jc.itchat4j.beans.BaseMsg;
+import com.jc.itchat4j.core.Core;
+import com.jc.itchat4j.face.IMsgHandlerFace;
+import com.jc.itchat4j.utils.MyHttpClient;
+import com.jc.itchat4j.utils.enums.StorageLoginInfoEnum;
 
 /**
  * 此示例演示如何获取所有好友的头像
