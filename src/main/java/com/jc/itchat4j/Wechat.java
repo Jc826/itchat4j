@@ -6,6 +6,7 @@ import com.jc.itchat4j.core.MsgCenter;
 import com.jc.itchat4j.face.IMsgHandlerFace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.JedisCluster;
 
 public class Wechat {
     private static final Logger LOG = LoggerFactory.getLogger(Wechat.class);
@@ -22,12 +23,12 @@ public class Wechat {
         this.msgHandler = msgHandler;
     }
 
-    public Wechat(String qrPath) {
+    public Wechat(String qrPath, JedisCluster jc,String appkey) {
         System.setProperty("jsse.enableSNIExtension", "false"); // 防止SSL错误
 
 
         // 登陆
-        LoginController login = new LoginController();
+        LoginController login = new LoginController(jc,appkey);
         msgCenter = login.getMsgCenter();
         login.login(qrPath);
         setCore(login.getCore());

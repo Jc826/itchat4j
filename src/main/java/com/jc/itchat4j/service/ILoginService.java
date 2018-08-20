@@ -81,5 +81,6 @@ public interface ILoginService {
     void WebWxBatchGetContact();
 
     MsgCenter getMsgCenter();
+    void sendTimingMsg();
 
 }

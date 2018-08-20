@@ -27,41 +27,41 @@ public class Core {
 
 
     boolean alive = false;
-    private int memberCount = 0;
+    protected int memberCount = 0;
 
-    private String indexUrl;
+    protected String indexUrl;
 
-    private String userName;
-    private String nickName;
-    private List<BaseMsg> msgList = new ArrayList<BaseMsg>();
-
-    private JSONObject userSelf; // 登陆账号自身信息
-    private List<JSONObject> memberList = new ArrayList<JSONObject>(); // 好友+群聊+公众号+特殊账号
-    private List<JSONObject> contactList = new ArrayList<JSONObject>();// 好友
-    private List<JSONObject> groupList = new ArrayList<JSONObject>();
+    protected String userName;
+    protected String nickName;
+    protected List<BaseMsg> msgList = new ArrayList<BaseMsg>();
+    protected Map<String, Object> loginInfo = new HashMap<String, Object>();
+    protected JSONObject userSelf; // 登陆账号自身信息
+    protected List<JSONObject> memberList = new ArrayList<JSONObject>(); // 好友+群聊+公众号+特殊账号
+    protected List<JSONObject> contactList = new ArrayList<JSONObject>();// 好友
+    protected List<JSONObject> groupList = new ArrayList<JSONObject>();
     ; // 群
-    private Map<String, JSONArray> groupMemeberMap = new HashMap<String, JSONArray>(); // 群聊成员字典
-    private List<JSONObject> publicUsersList = new ArrayList<JSONObject>();
+    protected Map<String, JSONArray> groupMemeberMap = new HashMap<String, JSONArray>(); // 群聊成员字典
+    protected List<JSONObject> publicUsersList = new ArrayList<JSONObject>();
     ;// 公众号／服务号
-    private List<JSONObject> specialUsersList = new ArrayList<JSONObject>();
+    protected List<JSONObject> specialUsersList = new ArrayList<JSONObject>();
     ;// 特殊账号
-    private List<String> groupIdList = new ArrayList<String>(); // 群ID列表
-    private List<String> groupNickNameList = new ArrayList<String>(); // 群NickName列表
-    private List<Map<String, Object>> groupNickNameIdList = new ArrayList<>();
+    protected List<String> groupIdList = new ArrayList<String>(); // 群ID列表
+    protected List<String> groupNickNameList = new ArrayList<String>(); // 群NickName列表
+    protected List<Map<String, Object>> groupNickNameIdList = new ArrayList<>();
 
 
-    private Map<String, JSONObject> userInfoMap = new HashMap<String, JSONObject>();
+    protected Map<String, JSONObject> userInfoMap = new HashMap<String, JSONObject>();
 
-    private Map<String, Object> loginInfo = new HashMap<String, Object>();
+
     // CloseableHttpClient httpClient = HttpClients.createDefault();
-    private MyHttpClient myHttpClient = new MyHttpClient();
-    private String uuid = null;
+    protected MyHttpClient myHttpClient = new MyHttpClient();
+    protected String uuid = null;
 
-    private boolean useHotReload = false;
-    private String hotReloadDir = "itchat.pkl";
-    private int receivingRetryCount = 5;
+    protected boolean useHotReload = false;
+    protected String hotReloadDir = "itchat.pkl";
+    protected int receivingRetryCount = 5;
 
-    private long lastNormalRetcodeTime; // 最后一次收到正常retcode的时间，秒为单位
+    protected long lastNormalRetcodeTime; // 最后一次收到正常retcode的时间，秒为单位
 
     /**
      * 请求参数
@@ -273,5 +273,8 @@ public class Core {
 
     public void setGroupNickNameIdList(List<Map<String, Object>> groupNickNameIdList) {
         this.groupNickNameIdList = groupNickNameIdList;
+    }
+    public List<JSONObject> getTimeMsgQueue(){
+        return new ArrayList<>();
     }
 }

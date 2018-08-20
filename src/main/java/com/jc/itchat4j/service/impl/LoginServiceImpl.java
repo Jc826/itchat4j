@@ -72,6 +72,32 @@ public class LoginServiceImpl implements ILoginService {
         return msgCenter;
     }
 
+    @Override
+    public void sendTimingMsg() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+
+                while (core.isAlive()) {
+                    List<JSONObject> msglst=   core.getTimeMsgQueue();
+                    if(msglst.size()>0){
+                        for (JSONObject jsonObject : msglst) {
+                            if(Long.parseLong(jsonObject.get("senTime").toString())<(System.currentTimeMillis())){
+                                messageTools.sendMsgByNickName(jsonObject.get("content").toString(),jsonObject.get("toUserNickName").toString());
+                            }
+                        }
+                    }
+
+
+
+
+                }
+            }
+        }).start();
+    }
+
     public void setMsgCenter(MsgCenter msgCenter) {
         this.msgCenter = msgCenter;
     }

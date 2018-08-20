@@ -2,6 +2,7 @@ package com.jc.itchat4j.controller;
 
 import com.jc.itchat4j.api.WechatTools;
 import com.jc.itchat4j.core.Core;
+import com.jc.itchat4j.core.CoreRedisStorage;
 import com.jc.itchat4j.core.MsgCenter;
 import com.jc.itchat4j.service.ILoginService;
 import com.jc.itchat4j.service.impl.LoginServiceImpl;
@@ -10,6 +11,7 @@ import com.jc.itchat4j.utils.SleepUtils;
 import com.jc.itchat4j.utils.tools.CommonTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.JedisCluster;
 
 /**
  * 登陆控制器
@@ -20,13 +22,15 @@ import org.slf4j.LoggerFactory;
  */
 public class LoginController {
     private static Logger LOG = LoggerFactory.getLogger(LoginController.class);
-    private Core core = new Core();
-    private WechatTools wechatTools = new WechatTools(core);
+    private Core core ;
+    private WechatTools wechatTools;
 
-    private ILoginService loginService = new LoginServiceImpl(core);
+    private ILoginService loginService ;
 
-    public LoginController() {
-
+    public LoginController(JedisCluster jedisCluster,String appkey) {
+        core = new CoreRedisStorage(jedisCluster,appkey);
+        wechatTools = new WechatTools(core);
+        loginService = new LoginServiceImpl(core);
 
     }
 
@@ -96,6 +100,8 @@ public class LoginController {
 
         LOG.info("12.开启微信状态检测线程");
         new Thread(new CheckLoginStatusThread(core)).start();
+        LOG.info("13.开启微信定时发送消息接口");
+        loginService.sendTimingMsg();
     }
 
     public Core getCore() {
