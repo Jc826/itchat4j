@@ -86,6 +86,9 @@ public class MessageTools {
     public boolean sendMsgByNickName(String text, String nickName) {
         if (nickName != null) {
             String toUserName = wechatTools.getUserNameByNickName(nickName);
+            if(toUserName==null){
+                toUserName=wechatTools.getGroupUserNameByNickName(nickName);
+            }
             if (toUserName != null) {
                 webWxSendMsg(1, text, toUserName);
                 return true;

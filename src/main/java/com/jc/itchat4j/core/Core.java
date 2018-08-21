@@ -30,6 +30,7 @@ public class Core {
     protected int memberCount = 0;
 
     protected String indexUrl;
+    protected String qr;
 
     protected String userName;
     protected String nickName;
@@ -276,5 +277,16 @@ public class Core {
     }
     public List<JSONObject> getTimeMsgQueue(){
         return new ArrayList<>();
+    }
+    public void rmTimeMsgQueue(JSONObject data){
+         getTimeMsgQueue().remove(data);
+    }
+
+    public String getQr() {
+        return qr;
+    }
+
+    public void setQr(String qr) {
+        this.qr = qr;
     }
 }

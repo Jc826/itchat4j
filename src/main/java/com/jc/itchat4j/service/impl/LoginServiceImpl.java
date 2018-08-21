@@ -85,7 +85,10 @@ public class LoginServiceImpl implements ILoginService {
                     if(msglst.size()>0){
                         for (JSONObject jsonObject : msglst) {
                             if(Long.parseLong(jsonObject.get("senTime").toString())<(System.currentTimeMillis())){
+
                                 messageTools.sendMsgByNickName(jsonObject.get("content").toString(),jsonObject.get("toUserNickName").toString());
+
+                                core.rmTimeMsgQueue(jsonObject);
                             }
                         }
                     }
@@ -187,7 +190,8 @@ public class LoginServiceImpl implements ILoginService {
             out.close();
             try {
                 // 打开登陆二维码图片
-                CommonTools.printQr(qrPath);
+//                CommonTools.printQr(qrPath);
+                core.setQr(qrPath);
             } catch (Exception e) {
                 LOG.info(e.getMessage());
             }

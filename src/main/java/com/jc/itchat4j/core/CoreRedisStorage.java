@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import redis.clients.jedis.JedisCluster;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -389,5 +390,30 @@ public class CoreRedisStorage extends Core {
         }
 
         return super.getTimeMsgQueue();
+    }
+    @Override
+    public void rmTimeMsgQueue(JSONObject data){
+        List<JSONObject> old=new ArrayList<>(getTimeMsgQueue());
+        old.remove(data);
+
+        jedisCluster.set("weixinAccountMsgQueue"+appkey,old.toString());
+
+    }
+
+    @Override
+    public String getQr() {
+        if (jedisCluster.hget(kyeName, "QR") != null) {
+            qr = jedisCluster.hget(kyeName, "QR");
+        } else {
+            qr = super.getQr();
+        }
+
+        return qr;
+    }
+
+    @Override
+    public void setQr(String qr) {
+        jedisCluster.hset(kyeName, "QR", qr);
+
     }
 }

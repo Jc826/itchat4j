@@ -125,7 +125,14 @@ public class WechatTools {
         return core.getGroupNickNameIdList();
     }
 
-
+    public String getGroupUserNameByNickName(String nickName) {
+        for (Map<String,Object> o : core.getGroupNickNameIdList()) {
+            if (o.get("NickName").equals(nickName)) {
+                return o.get("UserName").toString();
+            }
+        }
+        return null;
+    }
     /**
      * 根据groupIdList返回群成员列表
      *

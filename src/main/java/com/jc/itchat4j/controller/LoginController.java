@@ -33,6 +33,12 @@ public class LoginController {
         loginService = new LoginServiceImpl(core);
 
     }
+    public LoginController() {
+        core = new Core();
+        wechatTools = new WechatTools(core);
+        loginService = new LoginServiceImpl(core);
+
+    }
 
     public MsgCenter getMsgCenter() {
         return loginService.getMsgCenter();
