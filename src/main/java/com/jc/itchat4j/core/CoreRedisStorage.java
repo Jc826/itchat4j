@@ -60,31 +60,14 @@ public class CoreRedisStorage extends Core {
 
     }
 
-    @Override
-    public List<JSONObject> getMemberList() {
-        memberList = super.getMemberList();
-        if (jedisCluster.hget(kyeName, "memberList") != null) {
-            memberList = JSONArray.parseArray(jedisCluster.hget(kyeName, "memberList"), JSONObject.class);
 
-        }
-        return memberList;
-    }
 
     @Override
     public void setMemberList(List<JSONObject> memberList) {
-        jedisCluster.hset(kyeName, "memberList", memberList.toString());
+        jedisCluster.hset(kyeName, "memberList",JSONArray.toJSONString(memberList) );
     }
 
-    @Override
-    public Map<String, Object> getLoginInfo() {
 
-        if (jedisCluster.hget(kyeName, "loginInfo") == null) {
-            loginInfo = super.getLoginInfo();
-        } else {
-            loginInfo = JSONObject.parseObject(jedisCluster.hget(kyeName, "loginInfo"), Map.class);
-        }
-        return loginInfo;
-    }
 
     @Override
     public void setLoginInfo(Map<String, Object> loginInfo) {
@@ -158,105 +141,46 @@ public class CoreRedisStorage extends Core {
         jedisCluster.hset(kyeName, "hotReloadDir", hotReloadDir);
     }
 
-    @Override
-    public int getReceivingRetryCount() {
-        if (jedisCluster.hget(kyeName, "receivingRetryCount") != null) {
-            receivingRetryCount = Integer.parseInt(jedisCluster.hget(kyeName, "receivingRetryCount"));
 
-        } else {
-            receivingRetryCount = super.getReceivingRetryCount();
-
-        }
-        return receivingRetryCount;
-    }
 
     @Override
     public void setReceivingRetryCount(int receivingRetryCount) {
         jedisCluster.hset(kyeName, "receivingRetryCount", Integer.toString(receivingRetryCount));
     }
 
-    @Override
-    public List<String> getGroupIdList() {
 
-        if (jedisCluster.hget(kyeName, "groupIdList") == null) {
-            groupIdList = super.getGroupIdList();
-        } else {
-            groupIdList = JSONArray.parseArray(jedisCluster.hget(kyeName, "groupIdList"), String.class);
-        }
-        return groupIdList;
-    }
 
     @Override
     public void setGroupIdList(List<String> groupIdList) {
-        jedisCluster.hset(kyeName, "groupIdList", groupIdList.toString());
+        jedisCluster.hset(kyeName, "groupIdList", JSONArray.toJSONString(groupIdList));
 
     }
 
-    @Override
-    public List<JSONObject> getContactList() {
-        if (jedisCluster.hget(kyeName, "contactList") != null) {
-
-            contactList = JSONArray.parseArray(jedisCluster.hget(kyeName, "contactList"), JSONObject.class);
-        } else {
-            contactList = super.getContactList();
-        }
-        return contactList;
-    }
 
     @Override
     public void setContactList(List<JSONObject> contactList) {
-        jedisCluster.hset(kyeName, "contactList", contactList.toString());
+        jedisCluster.hset(kyeName, "contactList",JSONArray.toJSONString(contactList) );
 
     }
 
-    @Override
-    public List<JSONObject> getGroupList() {
 
-        if (jedisCluster.hget(kyeName, "groupList") == null) {
-            groupList = super.getGroupList();
-        } else {
-            groupList = JSONArray.parseArray(jedisCluster.hget(kyeName, "groupList"), JSONObject.class);
-        }
-        return groupList;
-    }
 
     @Override
     public void setGroupList(List<JSONObject> groupList) {
-        jedisCluster.hset(kyeName, "groupList", groupList.toString());
+        jedisCluster.hset(kyeName, "groupList",JSONArray.toJSONString(groupList) );
     }
 
-    @Override
-    public List<JSONObject> getPublicUsersList() {
-
-        if (jedisCluster.hget(kyeName, "publicUsersList") == null) {
-            publicUsersList = super.getPublicUsersList();
-        } else {
-            publicUsersList = JSONArray.parseArray(jedisCluster.hget(kyeName, "publicUsersList"), JSONObject.class);
-
-        }
-        return publicUsersList;
-    }
 
     @Override
     public void setPublicUsersList(List<JSONObject> publicUsersList) {
 
-        jedisCluster.hset(kyeName, "publicUsersList", publicUsersList.toString());
+        jedisCluster.hset(kyeName, "publicUsersList", JSONArray.toJSONString(publicUsersList));
     }
 
-    @Override
-    public List<JSONObject> getSpecialUsersList() {
-        if (jedisCluster.hget(kyeName, "specialUsersList") == null) {
-            specialUsersList = super.getSpecialUsersList();
-        } else {
-            specialUsersList = JSONArray.parseArray(jedisCluster.hget(kyeName, "specialUsersList"), JSONObject.class);
-
-        }
-        return specialUsersList;
-    }
 
     @Override
     public void setSpecialUsersList(List<JSONObject> specialUsersList) {
-        jedisCluster.hset(kyeName, "specialUsersList", specialUsersList.toString());
+        jedisCluster.hset(kyeName, "specialUsersList",JSONArray.toJSONString(specialUsersList));
     }
 
     @Override
@@ -291,16 +215,7 @@ public class CoreRedisStorage extends Core {
         jedisCluster.hset(kyeName, "nickName", nickName);
     }
 
-    @Override
-    public Map<String, JSONObject> getUserInfoMap() {
-        if (jedisCluster.hget(kyeName, "userInfoMap") == null) {
-            userInfoMap = super.getUserInfoMap();
-        } else {
-            userInfoMap = JSONObject.parseObject(String.valueOf(jedisCluster.hget(kyeName, "userInfoMap")), Map.class);
 
-        }
-        return userInfoMap;
-    }
 
     @Override
     public void setUserInfoMap(Map<String, JSONObject> userInfoMap) {
@@ -310,37 +225,19 @@ public class CoreRedisStorage extends Core {
 
     }
 
-    @Override
-    public List<String> getGroupNickNameList() {
-        if (jedisCluster.hget(kyeName, "groupNickNameList") == null) {
-            groupNickNameList = super.getGroupNickNameList();
-        } else {
-            groupNickNameList = JSONArray.parseArray(jedisCluster.hget(kyeName, "groupNickNameList"), String.class);
 
-        }
-        return groupNickNameList;
-    }
 
     @Override
     public void setGroupNickNameList(List<String> groupNickNameList) {
-        jedisCluster.hset(kyeName, "groupNickNameList", groupNickNameList.toString());
+        jedisCluster.hset(kyeName, "groupNickNameList",JSONArray.toJSONString(groupNickNameList));
 
     }
 
-    @Override
-    public Map<String, JSONArray> getGroupMemeberMap() {
-        if (jedisCluster.hget(kyeName, "groupMemeberMap") == null) {
-            groupMemeberMap = super.getGroupMemeberMap();
-        } else {
-            groupMemeberMap = JSONObject.parseObject(jedisCluster.hget(kyeName, "groupMemeberMap"), Map.class);
 
-        }
-        return groupMemeberMap;
-    }
 
     @Override
     public void setGroupMemeberMap(Map<String, JSONArray> groupMemeberMap) {
-        jedisCluster.hset(kyeName, "groupMemeberMap", groupMemeberMap.toString());
+        jedisCluster.hset(kyeName, "groupMemeberMap", JSONObject.toJSONString(groupMemeberMap));
     }
 
     @Override
@@ -359,27 +256,11 @@ public class CoreRedisStorage extends Core {
         jedisCluster.hset(kyeName, "indexUrl", indexUrl);
     }
 
-    @Override
-    public List<Map<String, Object>> getGroupNickNameIdList() {
 
-        if (jedisCluster.hget(kyeName, "groupNickNameIdList") == null) {
-            groupNickNameIdList = super.getGroupNickNameIdList();
-        } else {
-            List<JSONObject> obj = JSONArray.parseArray(jedisCluster.hget(kyeName, "groupNickNameIdList"), JSONObject.class);
-
-            for (JSONObject jsonObject : obj) {
-                Map item = JSONObject.parseObject(jsonObject.toString(), Map.class);
-                groupNickNameIdList.add(item);
-
-            }
-        }
-
-        return groupNickNameIdList;
-    }
 
     @Override
     public void setGroupNickNameIdList(List<Map<String, Object>> groupNickNameIdList) {
-        jedisCluster.hset(kyeName, "groupNickNameIdList", groupNickNameIdList.toString());
+        jedisCluster.hset(kyeName, "groupNickNameIdList", JSONArray.toJSONString(groupNickNameIdList));
     }
 
     @Override

@@ -4,7 +4,7 @@
 
   <groupId>com.jc</groupId>
   <artifactId>itchat4j</artifactId>
-  <version>1.1.0-snapshots</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
 
@@ -14,6 +14,17 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+    <!--定义下载的nexus地址-->
+    <repositories>
+        <repository>
+            <id>hosted-public</id>
+            <url>http://121.41.29.204:9090/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <!--定义上传的snapshots库和releases库的nexus地址-->
     <distributionManagement>
         <snapshotRepository>

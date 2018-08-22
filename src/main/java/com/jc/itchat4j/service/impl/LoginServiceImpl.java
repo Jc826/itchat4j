@@ -352,6 +352,7 @@ public class LoginServiceImpl implements ILoginService {
                                             JSONObject userInfo = modContactList.getJSONObject(j);
                                             // 存在主动加好友之后的同步联系人到本地
                                             core.getContactList().add(userInfo);
+                                            core.setContactList( core.getContactList());
                                         }
                                     } catch (Exception e) {
                                         LOG.info(e.getMessage());
@@ -440,13 +441,23 @@ public class LoginServiceImpl implements ILoginService {
                         groupNickIdMap.put("UserName", o.getString("UserName"));
                         groupNickIdMap.put("NickName", o.getString("NickName"));
                         core.getGroupNickNameIdList().add(groupNickIdMap);
+
                     }
                 } else if (o.getString("UserName").equals(core.getUserSelf().getString("UserName"))) { // 自己
                     core.getContactList().remove(o);
+
                 } else { // 普通联系人
                     core.getContactList().add(o);
+
                 }
             }
+            core.setGroupList(core.getGroupList());
+            core.setGroupNickNameList(core.getGroupNickNameList());
+            core.setPublicUsersList(core.getPublicUsersList());
+            core.setSpecialUsersList(core.getSpecialUsersList());
+            core.setGroupIdList(core.getGroupIdList());
+            core.setGroupNickNameIdList(core.getGroupNickNameIdList());
+            core.setContactList(core.getContactList());
             return;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -478,15 +489,22 @@ public class LoginServiceImpl implements ILoginService {
                 if (contactList.getJSONObject(i).getString("UserName").indexOf("@@") > -1) { // 群
                     core.getGroupNickNameList().add(contactList.getJSONObject(i).getString("NickName")); // 更新群昵称列表
                     core.getGroupList().add(contactList.getJSONObject(i)); // 更新群信息（所有）列表
+
                     core.getGroupMemeberMap().put(contactList.getJSONObject(i).getString("UserName"),
                             contactList.getJSONObject(i).getJSONArray("MemberList")); // 更新群成员Map
+
 //更新群昵称 及id 列表
                     Map<String, Object> groupNickIdMap = new HashMap<>();
                     groupNickIdMap.put("UserName", contactList.getJSONObject(i).getString("UserName"));
                     groupNickIdMap.put("NickName", contactList.getJSONObject(i).getString("NickName"));
                     core.getGroupNickNameIdList().add(groupNickIdMap);
+
                 }
             }
+            core.setGroupNickNameList(core.getGroupNickNameList());
+            core.setGroupMemeberMap(core.getGroupMemeberMap());
+            core.setGroupNickNameIdList(core.getGroupNickNameIdList());
+            core.setGroupList(core.getGroupList());
         } catch (Exception e) {
             LOG.info(e.getMessage());
         }
